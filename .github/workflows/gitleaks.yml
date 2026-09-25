@@ -1,0 +1,23 @@
+name: Gitleaks
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: "make gitleaks を実行するディレクトリ"
+        required: false
+        default: "."
+        type: string
+
+jobs:
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout（履歴全体）
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: make gitleaks
+        run: make gitleaks
+        working-directory: ${{ inputs.working-directory }}

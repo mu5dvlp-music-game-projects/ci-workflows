@@ -1,0 +1,43 @@
+name: Make
+
+on:
+  workflow_call:
+    inputs:
+      target:
+        description: "実行する Make ターゲット"
+        required: true
+        type: string
+      setup:
+        description: "ツールチェーンのセットアップ方法（none または mise）"
+        required: false
+        default: none
+        type: string
+      fetch-depth:
+        description: "actions/checkout の fetch-depth"
+        required: false
+        default: 1
+        type: number
+
+jobs:
+  make:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: ${{ inputs.fetch-depth }}
+
+      - name: setup の値を検証
+        if: inputs.setup != 'none' && inputs.setup != 'mise'
+        run: |
+          echo "setup は none または mise で指定してください"
+          exit 1
+
+      - name: mise のツールチェーンをセットアップ
+        if: inputs.setup == 'mise'
+        uses: jdx/mise-action@v2
+        with:
+          cache: true
+
+      - name: make
+        run: make ${{ inputs.target }}
