@@ -26,6 +26,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: ${{ inputs.fetch-depth }}
+          persist-credentials: false
 
       - name: setup の値を検証
         if: inputs.setup != 'none' && inputs.setup != 'mise'
@@ -40,4 +41,9 @@ jobs:
           cache: true
 
       - name: make
-        run: make ${{ inputs.target }}
+        # inputs.target を run: のシェル文字列へ直接展開しない(zizmor template-injection 対応)。
+        # env 経由にすることで、呼び出し元が渡す値にシェルの特殊文字が入っていても
+        # コード注入にならない。
+        env:
+          MAKE_TARGET: ${{ inputs.target }}
+        run: make "$MAKE_TARGET"
