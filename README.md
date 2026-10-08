@@ -15,10 +15,10 @@
 ```yaml
 jobs:
   gitleaks:
-    uses: mu5dvlp/ci-workflows/.github/workflows/gitleaks.yml@v1
+    uses: mu5dvlp-music-game-projects/ci-workflows/.github/workflows/gitleaks.yml@v1
 
   check:
-    uses: mu5dvlp/ci-workflows/.github/workflows/make.yml@v1
+    uses: mu5dvlp-music-game-projects/ci-workflows/.github/workflows/make.yml@v1
     with:
       target: check
       setup: mise
